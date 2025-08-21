@@ -18,6 +18,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/TextPlugin.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollToPlugin.min.js"></script>
     
     <!-- Three.js for Particle Background -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
@@ -85,15 +86,15 @@
             position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1;
         }
         
-        .page {
-            position: absolute; top: 0; left: 0; width: 100%; opacity: 0; visibility: hidden;
-            padding-top: 100px; padding-bottom: 100px;
+        .page-section {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 100px 1.5rem; /* 1.5rem is px-6 in tailwind */
         }
-        .page.active { opacity: 1; visibility: visible; position: relative; min-height: 100vh; }
-        .page-content {
-             display: flex; flex-direction: column; align-items: center; justify-content: center;
-             min-height: calc(100vh - 200px); padding: 2rem 0;
-        }
+        
         main { position: relative; }
 
         #case-study-modal {
@@ -113,6 +114,7 @@
         #modal-close-btn { color: var(--text-muted-color); transition: color 0.3s, transform 0.3s; }
         #modal-close-btn:hover { color: var(--text-color); transform: rotate(90deg); }
 
+        /* Timeline */
         .timeline {
             position: relative;
             max-width: 1200px;
@@ -160,6 +162,24 @@
         .timeline-item.active::after {
             background-color: var(--accent-color);
             border-color: var(--accent-color);
+        }
+
+        /* Responsive Timeline */
+        @media screen and (max-width: 768px) {
+            .timeline::after {
+                left: 31px;
+            }
+            .timeline-item {
+                width: 100%;
+                padding-left: 70px;
+                padding-right: 25px;
+            }
+            .timeline-item.right {
+                left: 0%;
+            }
+            .timeline-item.left::after, .timeline-item.right::after {
+                left: 15px;
+            }
         }
 
         /* Theme Toggle Button */
@@ -227,7 +247,7 @@
 <body class="antialiased">
 
     <div id="preloader">
-        <img src="screen.png" alt="DEVCROFT Logo" class="h-110">
+        <img src="logo.png" alt="DEVCROFT Logo" class="h-12">
     </div>
     <div id="page-transition">
         <div class="loader-text">DEVCROFT</div>
@@ -235,11 +255,10 @@
 
     <canvas id="hero-canvas"></canvas>
 
-    <!-- Header & Navigation -->
     <header id="header" class="fixed top-0 left-0 right-0 z-50 transition-all duration-300 glass-nav">
         <div class="container mx-auto px-6 py-4 flex justify-between items-center">
             <a href="#home" class="nav-link">
-                <img src="dEVCROFT.png" alt="DEVCROFT Logo" class="h-10 inline-block">
+                <img src="logo.png" alt="DEVCROFT Logo" class="h-8 inline-block">
             </a>
             <nav class="hidden md:flex space-x-8 items-center">
                 <a href="#work" class="nav-link text-slate-800 dark:text-slate-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors duration-300">The Work</a>
@@ -265,125 +284,113 @@
     </header>
 
     <main>
-        <!-- Page 0: Home -->
-        <section id="home" class="page active">
-            <div class="page-content">
-                <div class="text-center z-20 px-4">
-                    <h1 class="text-4xl md:text-7xl lg:text-8xl font-extrabold mb-4">
-                        <span id="greeting" class="block text-3xl md:text-5xl font-medium mb-4 opacity-0"></span>
-                        <span id="headline-text"></span>
-                        <span class="cursor text-blue-600 dark:text-blue-400">|</span>
-                    </h1>
-                    <p id="hero-subtitle" class="text-lg md:text-2xl text-slate-600 dark:text-slate-400 max-w-3xl mx-auto">We are digital architects, engineering unique and impactful web experiences.</p>
-                </div>
+        <section id="home" class="page-section">
+            <div class="text-center z-20 px-4">
+                <h1 class="text-4xl md:text-7xl lg:text-8xl font-extrabold mb-4">
+                    <span id="greeting" class="block text-3xl md:text-5xl font-medium mb-4 opacity-0"></span>
+                    <span id="headline-text"></span>
+                    <span class="cursor text-blue-600 dark:text-blue-400">|</span>
+                </h1>
+                <p id="hero-subtitle" class="text-lg md:text-2xl text-slate-600 dark:text-slate-400 max-w-3xl mx-auto">We are digital architects, engineering unique and impactful web experiences.</p>
             </div>
         </section>
 
-        <!-- Page 1: The Work (Products) -->
-        <section id="work" class="page px-6">
-            <div class="page-content">
-                <div class="container mx-auto">
-                     <div class="text-center mb-16 max-w-2xl mx-auto page-header">
-                        <h2 class="text-4xl md:text-6xl font-bold">Selected Work<span class="accent-color">.</span></h2>
-                        <p class="mt-4 text-slate-600 dark:text-slate-400 text-lg">Projects that define our commitment to quality and innovation.</p>
+        <section id="work" class="page-section">
+            <div class="container mx-auto">
+                 <div class="text-center mb-16 max-w-2xl mx-auto page-header">
+                    <h2 class="text-4xl md:text-6xl font-bold">Selected Work<span class="accent-color">.</span></h2>
+                    <p class="mt-4 text-slate-600 dark:text-slate-400 text-lg">Projects that define our commitment to quality and innovation.</p>
+                </div>
+                <div class="space-y-24">
+                    <div class="project-item flex flex-col md:flex-row items-center gap-8">
+                        <a href="#" class="md:w-1/2 project-image-container group block overflow-hidden relative bg-white dark:bg-slate-900/50 border border-slate-200 dark:border-slate-800 rounded-lg h-96 shadow-sm hover:shadow-xl transition-all duration-300" data-project="fintech">
+                            <img src="https://images.unsplash.com/photo-1601597111158-2f8e6392d410?q=80&w=2070&auto=format&fit=crop" alt="Fintech Project" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110">
+                        </a>
+                        <div class="md:w-1/2 project-text-container">
+                            <h3 class="text-3xl font-bold mb-4">Quantum Analytics</h3>
+                            <p class="text-slate-600 dark:text-slate-400 mb-6">A bespoke dashboard for a leading financial services company to visualize complex market data, replacing their outdated and clunky legacy system with an intuitive, real-time solution.</p>
+                            <a href="#" class="font-semibold text-blue-600 dark:text-blue-400 hover:underline" data-project="fintech">View Case Study &rarr;</a>
+                        </div>
                     </div>
-                    <div class="space-y-24">
-                        <!-- Project Item 1 -->
-                        <div class="project-item flex flex-col md:flex-row items-center gap-8">
-                            <a href="#" class="md:w-1/2 project-image-container group block overflow-hidden relative bg-white dark:bg-slate-900/50 border border-slate-200 dark:border-slate-800 rounded-lg h-96 shadow-sm hover:shadow-xl transition-all duration-300" data-project="fintech">
-                                <img src="ambuk.png" alt="AMBUK.LIFE" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110">
-                            </a>
-                            <div class="md:w-1/2 project-text-container">
-                                <h3 class="text-3xl font-bold mb-4">ambuk.life</h3>
-                                <p class="text-slate-600 dark:text-slate-400 mb-6">An Online Ambulance booking portal where users can book an Ambulance from there phone to their doorstep in case of any emergency, integrated with real time location services and Hospitals integrations</p>
-                                <a href="#" class="font-semibold text-blue-600 dark:text-blue-400 hover:underline" data-project="fintech">View Case Study &rarr;</a>
-                            </div>
+                    <div class="project-item flex flex-col md:flex-row-reverse items-center gap-8">
+                        <a href="#" class="md:w-1/2 project-image-container group block overflow-hidden relative bg-white dark:bg-slate-900/50 border border-slate-200 dark:border-slate-800 rounded-lg h-96 shadow-sm hover:shadow-xl transition-all duration-300" data-project="ecommerce">
+                            <img src="https://images.unsplash.com/photo-1557825835-b4527f242af7?q=80&w=2070&auto=format&fit=crop" alt="E-commerce Project" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110">
+                        </a>
+                        <div class="md:w-1/2 project-text-container">
+                            <h3 class="text-3xl font-bold mb-4">Nova Fashion Collective</h3>
+                            <p class="text-slate-600 dark:text-slate-400 mb-6">A scalable e-commerce platform for a startup fashion brand, built to handle high traffic and provide a seamless checkout experience that reflects their unique brand identity.</p>
+                            <a href="#" class="font-semibold text-blue-600 dark:text-blue-400 hover:underline" data-project="ecommerce">View Case Study &rarr;</a>
                         </div>
-                        <!-- Project Item 2 -->
-                        <div class="project-item flex flex-col md:flex-row-reverse items-center gap-8">
-                            <a href="#" class="md:w-1/2 project-image-container group block overflow-hidden relative bg-white dark:bg-slate-900/50 border border-slate-200 dark:border-slate-800 rounded-lg h-96 shadow-sm hover:shadow-xl transition-all duration-300" data-project="ecommerce">
-                                <img src="https://images.unsplash.com/photo-1557825835-b4527f242af7?q=80&w=2070&auto=format&fit=crop" alt="E-commerce Project" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110">
-                            </a>
-                            <div class="md:w-1/2 project-text-container">
-                                <h3 class="text-3xl font-bold mb-4">Nova Fashion Collective</h3>
-                                <p class="text-slate-600 dark:text-slate-400 mb-6">A scalable e-commerce platform for a startup fashion brand, built to handle high traffic and provide a seamless checkout experience that reflects their unique brand identity.</p>
-                                <a href="#" class="font-semibold text-blue-600 dark:text-blue-400 hover:underline" data-project="ecommerce">View Case Study &rarr;</a>
-                            </div>
-                        </div>
-                        <!-- Project Item 3 -->
-                        <div class="project-item flex flex-col md:flex-row items-center gap-8">
-                            <a href="#" class="md:w-1/2 project-image-container group block overflow-hidden relative bg-white dark:bg-slate-900/50 border border-slate-200 dark:border-slate-800 rounded-lg h-96 shadow-sm hover:shadow-xl transition-all duration-300" data-project="saas">
-                                <img src="https://images.unsplash.com/photo-1556742502-ec7c0e9f34b1?q=80&w=1974&auto=format&fit=crop" alt="SaaS Project" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110">
-                            </a>
-                            <div class="md:w-1/2 project-text-container">
-                                <h3 class="text-3xl font-bold mb-4">Synergy CRM</h3>
-                                <p class="text-slate-600 dark:text-slate-400 mb-6">A powerful, multi-tenant SaaS application built on a serverless architecture to provide B2B customers with actionable, real-time insights from their business data.</p>
-                                <a href="#" class="font-semibold text-blue-600 dark:text-blue-400 hover:underline" data-project="saas">View Case Study &rarr;</a>
-                            </div>
+                    </div>
+                    <div class="project-item flex flex-col md:flex-row items-center gap-8">
+                        <a href="#" class="md:w-1/2 project-image-container group block overflow-hidden relative bg-white dark:bg-slate-900/50 border border-slate-200 dark:border-slate-800 rounded-lg h-96 shadow-sm hover:shadow-xl transition-all duration-300" data-project="saas">
+                            <img src="https://images.unsplash.com/photo-1556742502-ec7c0e9f34b1?q=80&w=1974&auto=format&fit=crop" alt="SaaS Project" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110">
+                        </a>
+                        <div class="md:w-1/2 project-text-container">
+                            <h3 class="text-3xl font-bold mb-4">Synergy CRM</h3>
+                            <p class="text-slate-600 dark:text-slate-400 mb-6">A powerful, multi-tenant SaaS application built on a serverless architecture to provide B2B customers with actionable, real-time insights from their business data.</p>
+                            <a href="#" class="font-semibold text-blue-600 dark:text-blue-400 hover:underline" data-project="saas">View Case Study &rarr;</a>
                         </div>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- Page 2: Our Story (About) -->
-        <section id="story" class="page px-6">
-            <div class="page-content">
-                 <div class="container mx-auto">
-                    <div class="max-w-4xl text-center mx-auto mb-24 page-header">
-                        <h2 class="text-4xl md:text-6xl font-bold mb-8">We are a collective of designers, developers, and strategists obsessed with quality<span class="accent-color">.</span></h2>
-                        <p class="text-slate-600 dark:text-slate-400 text-xl leading-relaxed">DEVCROFT was founded on a simple idea: to build web solutions that are not only technologically excellent but also beautiful and a joy to use. We believe in collaboration, transparency, and a partnership approach. When you work with us, you're not just a client; you're a partner in the creative process.</p>
-                    </div>
+        <section id="story" class="page-section">
+            <div class="container mx-auto">
+                <div class="max-w-4xl text-center mx-auto mb-24 page-header">
+                    <h2 class="text-4xl md:text-6xl font-bold mb-8">We are a collective of designers, developers, and strategists obsessed with quality<span class="accent-color">.</span></h2>
+                    <p class="text-slate-600 dark:text-slate-400 text-xl leading-relaxed">DEVCROFT was founded on a simple idea: to build web solutions that are not only technologically excellent but also beautiful and a joy to use. We believe in collaboration, transparency, and a partnership approach. When you work with us, you're not just a client; you're a partner in the creative process.</p>
+                </div>
 
-                    <div class="text-center mb-24 page-header">
-                        <h3 class="text-3xl md:text-5xl font-bold">Our Core Values<span class="accent-color">.</span></h3>
+                <div class="text-center mb-24 page-header">
+                    <h3 class="text-3xl md:text-5xl font-bold">Our Core Values<span class="accent-color">.</span></h3>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-24 text-center">
+                    <div class="value-item">
+                        <svg class="mx-auto h-12 w-12 text-blue-600 dark:text-blue-400 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                        <h4 class="text-2xl font-bold mb-2">Pixel-Perfect Design</h4>
+                        <p class="text-slate-600 dark:text-slate-400">We believe in craftsmanship down to the last detail.</p>
                     </div>
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-24 text-center">
-                        <div class="value-item">
-                            <svg class="mx-auto h-12 w-12 text-blue-600 dark:text-blue-400 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-                            <h4 class="text-2xl font-bold mb-2">Pixel-Perfect Design</h4>
-                            <p class="text-slate-600 dark:text-slate-400">We believe in craftsmanship down to the last detail.</p>
-                        </div>
-                        <div class="value-item">
-                            <svg class="mx-auto h-12 w-12 text-blue-600 dark:text-blue-400 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" /></svg>
-                            <h4 class="text-2xl font-bold mb-2">Collaborative Partnership</h4>
-                            <p class="text-slate-600 dark:text-slate-400">Your success is our success. We build with you, not for you.</p>
-                        </div>
-                        <div class="value-item">
-                            <svg class="mx-auto h-12 w-12 text-blue-600 dark:text-blue-400 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"/></svg>
-                            <h4 class="text-2xl font-bold mb-2">Future-Proof Code</h4>
-                            <p class="text-slate-600 dark:text-slate-400">We write clean, scalable code that stands the test of time.</p>
-                        </div>
+                    <div class="value-item">
+                        <svg class="mx-auto h-12 w-12 text-blue-600 dark:text-blue-400 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" /></svg>
+                        <h4 class="text-2xl font-bold mb-2">Collaborative Partnership</h4>
+                        <p class="text-slate-600 dark:text-slate-400">Your success is our success. We build with you, not for you.</p>
                     </div>
-                    
-                    <div id="process-section" class="w-full">
-                        <div class="text-center mb-16 page-header">
-                            <h3 class="text-3xl md:text-5xl font-bold">Our Process<span class="accent-color">.</span></h3>
+                    <div class="value-item">
+                        <svg class="mx-auto h-12 w-12 text-blue-600 dark:text-blue-400 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"/></svg>
+                        <h4 class="text-2xl font-bold mb-2">Future-Proof Code</h4>
+                        <p class="text-slate-600 dark:text-slate-400">We write clean, scalable code that stands the test of time.</p>
+                    </div>
+                </div>
+                
+                <div id="process-section" class="w-full">
+                    <div class="text-center mb-16 page-header">
+                        <h3 class="text-3xl md:text-5xl font-bold">Our Process<span class="accent-color">.</span></h3>
+                    </div>
+                    <div class="timeline">
+                        <div class="timeline-item left">
+                            <div class="timeline-content">
+                                <h3 class="text-2xl font-bold mb-2 text-blue-600 dark:text-blue-400">01. Discover</h3>
+                                <p class="text-slate-600 dark:text-slate-400">We start by diving deep into your vision, goals, and target audience. This phase is all about listening, asking the right questions, and aligning on a shared understanding of success.</p>
+                            </div>
                         </div>
-                        <div class="timeline">
-                            <div class="timeline-item left">
-                                <div class="timeline-content">
-                                    <h3 class="text-2xl font-bold mb-2 text-blue-600 dark:text-blue-400">01. Discover</h3>
-                                    <p class="text-slate-600 dark:text-slate-400">We start by diving deep into your vision, goals, and target audience. This phase is all about listening, asking the right questions, and aligning on a shared understanding of success.</p>
-                                </div>
+                         <div class="timeline-item right">
+                            <div class="timeline-content">
+                                <h3 class="text-2xl font-bold mb-2 text-blue-600 dark:text-blue-400">02. Design</h3>
+                                <p class="text-slate-600 dark:text-slate-400">Next, we translate our findings into a tangible user experience through wireframes, mockups, and prototypes. We focus on creating intuitive, user-centric designs that are both beautiful and functional.</p>
                             </div>
-                             <div class="timeline-item right">
-                                <div class="timeline-content">
-                                    <h3 class="text-2xl font-bold mb-2 text-blue-600 dark:text-blue-400">02. Design</h3>
-                                    <p class="text-slate-600 dark:text-slate-400">Next, we translate our findings into a tangible user experience through wireframes, mockups, and prototypes. We focus on creating intuitive, user-centric designs that are both beautiful and functional.</p>
-                                </div>
+                        </div>
+                         <div class="timeline-item left">
+                            <div class="timeline-content">
+                                <h3 class="text-2xl font-bold mb-2 text-blue-600 dark:text-blue-400">03. Develop</h3>
+                                <p class="text-slate-600 dark:text-slate-400">With a solid blueprint in hand, our engineers bring the design to life using clean, efficient code and modern technologies. We follow agile methodologies to ensure flexibility and transparency.</p>
                             </div>
-                             <div class="timeline-item left">
-                                <div class="timeline-content">
-                                    <h3 class="text-2xl font-bold mb-2 text-blue-600 dark:text-blue-400">03. Develop</h3>
-                                    <p class="text-slate-600 dark:text-slate-400">With a solid blueprint in hand, our engineers bring the design to life using clean, efficient code and modern technologies. We follow agile methodologies to ensure flexibility and transparency.</p>
-                                </div>
-                            </div>
-                            <div class="timeline-item right">
-                                <div class="timeline-content">
-                                    <h3 class="text-2xl font-bold mb-2 text-blue-600 dark:text-blue-400">04. Deploy</h3>
-                                    <p class="text-slate-600 dark:text-slate-400">After rigorous testing, we deploy the application to a scalable cloud infrastructure. But our partnership doesn't end there; we provide ongoing support to ensure everything runs smoothly.</p>
-                                </div>
+                        </div>
+                        <div class="timeline-item right">
+                            <div class="timeline-content">
+                                <h3 class="text-2xl font-bold mb-2 text-blue-600 dark:text-blue-400">04. Deploy</h3>
+                                <p class="text-slate-600 dark:text-slate-400">After rigorous testing, we deploy the application to a scalable cloud infrastructure. But our partnership doesn't end there; we provide ongoing support to ensure everything runs smoothly.</p>
                             </div>
                         </div>
                     </div>
@@ -391,82 +398,78 @@
             </div>
         </section>
 
-        <!-- Page 3: The Architects (Team) -->
-        <section id="architects" class="page px-6">
-            <div class="page-content">
-                <div class="container mx-auto">
-                    <div class="text-center mb-16 max-w-2xl mx-auto page-header">
-                        <h2 class="text-4xl md:text-6xl font-bold">The Architects<span class="accent-color">.</span></h2>
-                        <p class="mt-4 text-slate-600 dark:text-slate-400 text-lg">The minds behind the magic. Passionate creators dedicated to their craft.</p>
+        <section id="architects" class="page-section">
+            <div class="container mx-auto">
+                <div class="text-center mb-16 max-w-2xl mx-auto page-header">
+                    <h2 class="text-4xl md:text-6xl font-bold">The Architects<span class="accent-color">.</span></h2>
+                    <p class="mt-4 text-slate-600 dark:text-slate-400 text-lg">The minds behind the magic. Passionate creators dedicated to their craft.</p>
+                </div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
+                    <div class="team-card text-center group h-80">
+                        <div class="card-inner">
+                            <div class="card-front">
+                                <div class="relative w-48 h-48 mx-auto rounded-full overflow-hidden border-2 border-slate-300 dark:border-slate-700 group-hover:border-blue-500 transition-colors duration-300">
+                                    <img src="Tanuj.png" alt="Team Member" class="w-48 h-48 object-cover">
+                                </div>
+                                <h3 class="mt-6 text-2xl font-semibold">Tanuj Sharma</h3>
+                                <p class="text-blue-600 dark:text-blue-400">The Mastermind</p>
+                            </div>
+                            <div class="card-back">
+                                <h4 class="font-bold text-lg text-blue-600 dark:text-blue-400">Key Skill</h4>
+                                <p class="mb-4">Strategic Vision</p>
+                                <h4 class="font-bold text-lg text-blue-600 dark:text-blue-400">Fun Fact</h4>
+                                <p>Tech nerd and extrovert at same time</p>
+                            </div>
+                        </div>
                     </div>
-                    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
-                        <!-- Team Member Card -->
-                        <div class="team-card text-center group h-80">
-                            <div class="card-inner">
-                                <div class="card-front">
-                                    <div class="relative w-48 h-48 mx-auto rounded-full overflow-hidden border-2 border-slate-300 dark:border-slate-700 group-hover:border-blue-500 transition-colors duration-300">
-                                        <img src="Tanuj.png" alt="Team Member" class="w-48 h-48 object-cover">
-                                    </div>
-                                    <h3 class="mt-6 text-2xl font-semibold">Tanuj Sharma</h3>
-                                    <p class="text-blue-600 dark:text-blue-400">The Mastermind</p>
+                    <div class="team-card text-center group h-80">
+                       <div class="card-inner">
+                            <div class="card-front">
+                                <div class="relative w-48 h-48 mx-auto rounded-full overflow-hidden border-2 border-slate-300 dark:border-slate-700 group-hover:border-blue-500 transition-colors duration-300">
+                                    <img src="Lakshay.png" alt="Team Member" class="w-48 h-48 object-cover">
                                 </div>
-                                <div class="card-back">
-                                    <h4 class="font-bold text-lg text-blue-600 dark:text-blue-400">Key Skill</h4>
-                                    <p class="mb-4">Strategic Vision</p>
-                                    <h4 class="font-bold text-lg text-blue-600 dark:text-blue-400">Fun Fact</h4>
-                                    <p>Tech nerd and extrovert at same time</p>
-                                </div>
+                                <h3 class="mt-6 text-2xl font-semibold">Lakshay Vashisth</h3>
+                                <p class="text-blue-600 dark:text-blue-400">Front End Magician</p>
+                            </div>
+                            <div class="card-back">
+                                <h4 class="font-bold text-lg text-blue-600 dark:text-blue-400">Key Skill</h4>
+                                <p class="mb-4">Best UI</p>
+                                <h4 class="font-bold text-lg text-blue-600 dark:text-blue-400">Fun Fact</h4>
+                                <p></p>
                             </div>
                         </div>
-                        <div class="team-card text-center group h-80">
-                           <div class="card-inner">
-                                <div class="card-front">
-                                    <div class="relative w-48 h-48 mx-auto rounded-full overflow-hidden border-2 border-slate-300 dark:border-slate-700 group-hover:border-blue-500 transition-colors duration-300">
-                                        <img src="Lakshay.png" alt="Team Member" class="w-48 h-48 object-cover">
-                                    </div>
-                                    <h3 class="mt-6 text-2xl font-semibold">Lakshay Vashisth</h3>
-                                    <p class="text-blue-600 dark:text-blue-400">Front End Magician</p>
+                    </div>
+                    <div class="team-card text-center group h-80">
+                       <div class="card-inner">
+                            <div class="card-front">
+                                <div class="relative w-48 h-48 mx-auto rounded-full overflow-hidden border-2 border-slate-300 dark:border-slate-700 group-hover:border-blue-500 transition-colors duration-300">
+                                    <img src="Sachin.png" alt="Team Member" class="w-48 h-48 object-cover">
                                 </div>
-                                <div class="card-back">
-                                    <h4 class="font-bold text-lg text-blue-600 dark:text-blue-400">Key Skill</h4>
-                                    <p class="mb-4">Best UI</p>
-                                    <h4 class="font-bold text-lg text-blue-600 dark:text-blue-400">Fun Fact</h4>
-                                    <p></p>
-                                </div>
+                                <h3 class="mt-6 text-2xl font-semibold">Sachin Bisht</h3>
+                                <p class="text-blue-600 dark:text-blue-400">Database Crafter</p>
+                            </div>
+                            <div class="card-back">
+                                <h4 class="font-bold text-lg text-blue-600 dark:text-blue-400">Key Skill</h4>
+                                <p class="mb-4">Efficient Databases</p>
+                                <h4 class="font-bold text-lg text-blue-600 dark:text-blue-400">Fun Fact</h4>
+                                <p>Can play any type of sport </p>
                             </div>
                         </div>
-                        <div class="team-card text-center group h-80">
-                           <div class="card-inner">
-                                <div class="card-front">
-                                    <div class="relative w-48 h-48 mx-auto rounded-full overflow-hidden border-2 border-slate-300 dark:border-slate-700 group-hover:border-blue-500 transition-colors duration-300">
-                                        <img src="Sachin.png" alt="Team Member" class="w-48 h-48 object-cover">
-                                    </div>
-                                    <h3 class="mt-6 text-2xl font-semibold">Sachin Bisht</h3>
-                                    <p class="text-blue-600 dark:text-blue-400">Database Crafter</p>
+                    </div>
+                     <div class="team-card text-center group h-80">
+                       <div class="card-inner">
+                            <div class="card-front">
+                                <div class="relative w-48 h-48 mx-auto rounded-full overflow-hidden border-2 border-slate-300 dark:border-slate-700 group-hover:border-blue-500 transition-colors duration-300">
+                                    <img src="Anubhav.png" alt="Team Member" class="w-48 h-48 object-cover">
                                 </div>
-                                <div class="card-back">
-                                    <h4 class="font-bold text-lg text-blue-600 dark:text-blue-400">Key Skill</h4>
-                                    <p class="mb-4">Efficient Databases</p>
-                                    <h4 class="font-bold text-lg text-blue-600 dark:text-blue-400">Fun Fact</h4>
-                                    <p>Can play any type of sport </p>
-                                </div>
+                                <h3 class="mt-6 text-2xl font-semibold">Anubhav Pathak</h3>
+                                <p class="text-blue-600 dark:text-blue-400">Backend Handler</p>
                             </div>
-                        </div>
-                         <div class="team-card text-center group h-80">
-                           <div class="card-inner">
-                                <div class="card-front">
-                                    <div class="relative w-48 h-48 mx-auto rounded-full overflow-hidden border-2 border-slate-300 dark:border-slate-700 group-hover:border-blue-500 transition-colors duration-300">
-                                        <img src="Anubhav.png" alt="Team Member" class="w-48 h-48 object-cover">
-                                    </div>
-                                    <h3 class="mt-6 text-2xl font-semibold">Anubhav Pathak</h3>
-                                    <p class="text-blue-600 dark:text-blue-400">Backend Handler</p>
-                                </div>
-                                <div class="card-back">
-                                    <h4 class="font-bold text-lg text-blue-600 dark:text-blue-400">Key Skill</h4>
-                                    <p class="mb-4">Backend</p>
-                                    <h4 class="font-bold text-lg text-blue-600 dark:text-blue-400">Fun Fact</h4>
-                                    <p>Total GYM geek</p>
-                                </div>
+                            <div class="card-back">
+                                <h4 class="font-bold text-lg text-blue-600 dark:text-blue-400">Key Skill</h4>
+                                <p class="mb-4">Backend</p>
+                                <h4 class="font-bold text-lg text-blue-600 dark:text-blue-400">Fun Fact</h4>
+                                <p>Total GYM geek</p>
                             </div>
                         </div>
                     </div>
@@ -474,45 +477,41 @@
             </div>
         </section>
 
-        <!-- Page 4: Connect (Contact) -->
-        <section id="connect" class="page px-6">
-    <div class="page-content">
-        <div class="container mx-auto text-center page-header">
-            <h2 class="text-4xl md:text-6xl font-bold">Have a project in mind<span class="accent-color">?</span></h2>
-            <p class="mt-4 text-slate-600 dark:text-slate-400 text-lg max-w-2xl mx-auto">Let's connect and build something amazing together.</p>
-            
-            <form id="contact-form" class="mt-12 max-w-xl mx-auto text-left relative">
-                <div class="form-fields space-y-4">
-                    <div>
-                        <label for="name" class="sr-only">Name</label>
-                        <input type="text" id="name" placeholder="Your Name" required class="form-input w-full p-3 rounded-md">
-                    </div>
-                    <div>
-                        <label for="email" class="sr-only">Email</label>
-                        <input type="email" id="email" placeholder="Your Email" required class="form-input w-full p-3 rounded-md">
-                    </div>
-                    <div>
-                        <label for="phone" class="sr-only">Phone Number</label>
-                        <input id="phone" placeholder="Your Phone number"  required class="form-input w-full p-3 rounded-md">
-                    </div>
-                    <div>
-                        <label for="message" class="sr-only">Message</label>
-                        <textarea id="message" placeholder="Your Message" rows="5" required class="form-input w-full p-3 rounded-md"></textarea>
-                    </div>
-                    <button type="submit" class="w-full bg-blue-600 text-white font-semibold p-4 rounded-md hover:bg-blue-700 transition-colors duration-300 dark:bg-blue-500 dark:hover:bg-blue-600">
-                        Send Message
-                    </button>
+        <section id="connect" class="page-section">
+    <div class="container mx-auto text-center page-header">
+        <h2 class="text-4xl md:text-6xl font-bold">Have a project in mind<span class="accent-color">?</span></h2>
+        <p class="mt-4 text-slate-600 dark:text-slate-400 text-lg max-w-2xl mx-auto">Let's connect and build something amazing together.</p>
+        
+        <form id="contact-form" class="mt-12 max-w-xl mx-auto text-left relative">
+            <div class="form-fields space-y-4">
+                <div>
+                    <label for="name" class="sr-only">Name</label>
+                    <input type="text" id="name" name="name" placeholder="Your Name" required class="form-input w-full p-3 rounded-md">
                 </div>
-                <div id="form-success" class="absolute inset-0 flex items-center justify-center opacity-0 pointer-events-none transition-opacity duration-500">
-                    <p class="text-2xl font-semibold">Thank you! Message sent.</p>
+                <div>
+                    <label for="email" class="sr-only">Email</label>
+                    <input type="email" id="email" name="email" placeholder="Your Email" required class="form-input w-full p-3 rounded-md">
                 </div>
-            </form>
-        </div>
+                <div>
+                    <label for="phone" class="sr-only">Phone Number</label>
+                    <input id="phone" name="phone" placeholder="Your Phone number"  required class="form-input w-full p-3 rounded-md">
+                </div>
+                <div>
+                    <label for="message" class="sr-only">Message</label>
+                    <textarea id="message" name="message" placeholder="Your Message" rows="5" required class="form-input w-full p-3 rounded-md"></textarea>
+                </div>
+                <button type="submit" class="w-full bg-blue-600 text-white font-semibold p-4 rounded-md hover:bg-blue-700 transition-colors duration-300 dark:bg-blue-500 dark:hover:bg-blue-600">
+                    Send Message
+                </button>
+            </div>
+            <div id="form-success" class="absolute inset-0 flex items-center justify-center opacity-0 pointer-events-none transition-opacity duration-500">
+                <p class="text-2xl font-semibold">Thank you! Message sent.</p>
+            </div>
+        </form>
     </div>
 </section>
     </main>
 
-    <!-- Case Study Modal -->
     <div id="case-study-modal">
         <div id="modal-backdrop"></div>
         <div id="modal-content">
@@ -546,7 +545,6 @@
         </div>
     </div>
 
-    <!-- Footer -->
     <footer class="fixed bottom-0 left-0 right-0 py-4 z-10">
         <div class="container mx-auto px-6 text-center text-slate-500">
             <p>&copy; <span id="year"></span> DEVCROFT. All Rights Reserved.</p>
@@ -646,52 +644,12 @@
 
             // --- Page Navigation Logic ---
             const navLinks = document.querySelectorAll('.nav-link');
-            const pageTransition = document.getElementById('page-transition');
-            let currentPage = document.querySelector('.page.active');
-            let isAnimating = false;
-
-            function switchPage(targetId) {
-                if (isAnimating) return;
-                const targetPage = document.getElementById(targetId);
-                if (!targetPage || targetPage === currentPage) return;
-
-                isAnimating = true;
-                
-                // Kill existing ScrollTriggers to prevent conflicts
-                ScrollTrigger.getAll().forEach(trigger => trigger.kill());
-
-                gsap.to(pageTransition, {
-                    opacity: 1,
-                    duration: 0.5,
-                    ease: 'power2.inOut',
-                    onComplete: () => {
-                        currentPage.classList.remove('active');
-                        targetPage.classList.add('active');
-                        currentPage = targetPage;
-                        window.scrollTo(0, 0);
-                        
-                        // Set initial state for new page content before animating in
-                        gsap.set(targetPage.querySelectorAll('.page-header, .project-item, .team-card, .timeline-item, .value-item'), { opacity: 0, y: 30 });
-
-                        gsap.to(pageTransition, {
-                            opacity: 0,
-                            duration: 0.5,
-                            ease: 'power2.inOut',
-                            delay: 0.3,
-                            onComplete: () => {
-                                isAnimating = false;
-                                initPageAnimations(targetPage);
-                            }
-                        });
-                    }
-                });
-            }
-
+            
             navLinks.forEach(link => {
                 link.addEventListener('click', (e) => {
                     e.preventDefault();
-                    const targetId = link.getAttribute('href').substring(1);
-                    switchPage(targetId);
+                    const targetId = link.getAttribute('href');
+                    gsap.to(window, { duration: 1.5, scrollTo: targetId, ease: 'power2.inOut' });
                     if (!mobileMenu.classList.contains('-translate-x-full')) {
                         mobileMenu.classList.add('-translate-x-full');
                         hamburgerIcon.classList.remove('hidden');
@@ -722,38 +680,21 @@
                 .to('.cursor', { opacity: 0, ease: "power1.inOut", repeat: -1, yoyo: true, duration: 0.5 }, "-=2")
                 .fromTo('#hero-subtitle', { opacity: 0, y: 20 }, { y: 0, opacity: 1, duration: 1.2 }, "-=1.5");
             
-            function initPageAnimations(container) {
-                const pageHeaders = container.querySelectorAll('.page-header');
-                const projectItems = container.querySelectorAll('.project-item');
-                const teamCards = container.querySelectorAll('.team-card');
-                const timelineItems = container.querySelectorAll('.timeline-item');
-                const valueItems = container.querySelectorAll('.value-item');
+            gsap.utils.toArray('.page-header, .project-item, .team-card, .timeline-item, .value-item').forEach(el => {
+                gsap.from(el, {
+                    scrollTrigger: {
+                        trigger: el,
+                        start: 'top 85%',
+                        toggleActions: 'play none none reverse'
+                    },
+                    opacity: 0,
+                    y: 50,
+                    duration: 0.8,
+                    stagger: 0.1,
+                    ease: 'power3.out'
+                });
+            });
 
-                if (pageHeaders.length > 0) {
-                    gsap.to(pageHeaders, { opacity: 1, y: 0, duration: 0.8, ease: 'power3.out', stagger: 0.2 });
-                }
-                if (projectItems.length > 0) {
-                     gsap.to(projectItems, { opacity: 1, y: 0, stagger: 0.2, duration: 0.8, ease: 'power3.out', delay: 0.2 });
-                }
-                if (teamCards.length > 0) {
-                     gsap.to(teamCards, { opacity: 1, y: 0, stagger: 0.1, duration: 0.8, ease: 'power3.out', delay: 0.2 });
-                }
-                 if (valueItems.length > 0) {
-                     gsap.to(valueItems, { opacity: 1, y: 0, stagger: 0.1, duration: 0.8, ease: 'power3.out', delay: 0.4 });
-                }
-                if(timelineItems.length > 0) {
-                    timelineItems.forEach(item => {
-                        gsap.to(item, {
-                            scrollTrigger: { trigger: item, start: 'top 85%', toggleActions: 'play none none reverse' },
-                            opacity: 1, y: 0,
-                            duration: 0.8, ease: 'power3.out',
-                            onComplete: () => item.classList.add('active'),
-                            onReverseComplete: () => item.classList.remove('active')
-                        });
-                    });
-                }
-            }
-            initPageAnimations(currentPage);
 
             // --- Magnetic Hover Effect ---
             document.querySelectorAll('.project-image-container').forEach(card => {
@@ -863,6 +804,13 @@
                   .to(formSuccess, { opacity: 1, duration: 0.5, onComplete: () => {
                       contactForm.removeChild(airplaneContainer);
                   }}, "-=0.5");
+                
+                // Submit to Google Sheet
+                const formData = new FormData(contactForm);
+                fetch("https://script.google.com/macros/s/AKfycbyOJ_LU2DARNxEdvSmvQ4Fmuc-2AhCOkJ8yC2KssvsJPYulppVe21of9ycFgxA40_gUMA/exec", {
+                    method: "POST",
+                    body: formData
+                }).catch(err => console.error(err));
             });
 
 
@@ -972,25 +920,6 @@
             // --- Footer Year ---
             document.getElementById('year').textContent = new Date().getFullYear();
         });
-        document.getElementById("contact-form").addEventListener("submit", function(e) {
-  e.preventDefault();
-
-  const formData = new FormData(this);
-
-  fetch("https://script.google.com/macros/s/https://script.google.com/macros/s/AKfycbyOJ_LU2DARNxEdvSmvQ4Fmuc-2AhCOkJ8yC2KssvsJPYulppVe21of9ycFgxA40_gUMA/exec/exec", {
-    method: "POST",
-    body: formData
-  })
-  .then(res => res.json())
-  .then(data => {
-      // Hide form, show success
-      document.querySelector(".form-fields").style.display = "none";
-      const successMsg = document.getElementById("form-success");
-      successMsg.classList.remove("opacity-0", "pointer-events-none");
-      successMsg.classList.add("opacity-100");
-  })
-  .catch(err => alert("Error: " + err));
-});
     </script>
 </body>
 </html>
