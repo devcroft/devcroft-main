@@ -858,18 +858,43 @@
             }
 
             function initParticles() {
-                const material = new THREE.PointsMaterial({ color: 0x3b82f6, size: 2, blending: THREE.AdditiveBlending, transparent: true, sizeAttenuation: true });
-                const geometry = new THREE.BufferGeometry();
-                const vertices = [];
-                const numParticles = 5000;
-                for (let i = 0; i < numParticles; i++) {
-                    vertices.push((Math.random() - 0.5) * 2000, (Math.random() - 0.5) * 2000, (Math.random() - 0.5) * 2000);
-                }
-                geometry.setAttribute('position', new THREE.Float32BufferAttribute(vertices, 3));
-                const particles = new THREE.Points(geometry, material);
-                scene.add(particles);
-                scene.userData.particles = particles;
-            }
+    // Scene setup is the same
+    const material = new THREE.PointsMaterial({ 
+        size: 2, 
+        blending: THREE.AdditiveBlending, 
+        transparent: true, 
+        sizeAttenuation: true,
+        vertexColors: true // Enable vertex colors
+    });
+
+    const geometry = new THREE.BufferGeometry();
+    const vertices = [];
+    const colors = [];
+    const numParticles = 10000; // Increased particle count for density
+
+    const color1 = new THREE.Color("#3b82f6"); // Blue
+    const color2 = new THREE.Color("#9333ea"); // Purple
+    const color3 = new THREE.Color("#ec4899"); // Pink
+
+    for (let i = 0; i < numParticles; i++) {
+        const x = (Math.random() - 0.5) * 2500;
+        const y = (Math.random() - 0.5) * 2500;
+        const z = (Math.random() - 0.5) * 2500;
+        vertices.push(x, y, z);
+
+        // Create a color gradient for the nebula effect
+        const randomColor = new THREE.Color().lerpColors(color1, color2, Math.random());
+        randomColor.lerp(color3, Math.random() * 0.5);
+        colors.push(randomColor.r, randomColor.g, randomColor.b);
+    }
+    
+    geometry.setAttribute('position', new THREE.Float32BufferAttribute(vertices, 3));
+    geometry.setAttribute('color', new THREE.Float32BufferAttribute(colors, 3));
+
+    const particles = new THREE.Points(geometry, material);
+    scene.add(particles);
+    scene.userData.particles = particles;
+}
 
             function onWindowResize() {
                 if (camera && renderer) {
@@ -904,9 +929,15 @@
                         }
                         scene.userData.line.geometry.setAttribute('position', new THREE.Float32BufferAttribute(positions, 3));
                     } else if (currentAnimation === 'particles' && scene.userData.particles) {
-                        const time = Date.now() * 0.00005;
-                        scene.userData.particles.rotation.x = time * 0.2;
-                        scene.userData.particles.rotation.y = time * 0.4;
+    const time = Date.now() * 0.00005;
+    const particles = scene.userData.particles;
+    
+    particles.rotation.x = time * 0.2;
+    particles.rotation.y = time * 0.4;
+
+    // Pulsating effect
+    const timePulsate = Date.now() * 0.002;
+    particles.material.size = 1.5 + Math.sin(timePulsate) * 0.5;
                     }
                     renderer.render(scene, camera);
                 }
@@ -924,6 +955,7 @@
     </script>
 </body>
 </html>
+
 
 
 
