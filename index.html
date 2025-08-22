@@ -494,9 +494,9 @@
                     <input type="email" id="email" name="email" placeholder="Your Email" required class="form-input w-full p-3 rounded-md">
                 </div>
                 <div>
-                    <label for="phone" class="sr-only">Phone Number</label>
-                    <input type="number" name="phone" placeholder="Your Phone number"  maxlength="10"  required class="form-input w-full p-3 rounded-md">
-                </div>
+  <label for="phone" class="sr-only">Phone Number</label>
+  <input type="tel" id="phone" name="phone" placeholder="Your Phone number" pattern="[0-9]{10}" maxlength="10" required class="form-input w-full p-3 rounded-md">
+</div>
                 <div>
                     <label for="message" class="sr-only">Message</label>
                     <textarea id="message" name="message" placeholder="Your Message" rows="5" required class="form-input w-full p-3 rounded-md"></textarea>
@@ -955,6 +955,7 @@
     </script>
 </body>
 </html>
+
 
 
 
